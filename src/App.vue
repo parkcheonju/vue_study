@@ -1,31 +1,27 @@
 <template>
-  <div class="black-bg" v-if="modal == 1">
-    <div class="white-bg">
-      <h4>{{oneroom[click].title}}</h4>
-      <p>상세페이지내용</p>
-      <button @click="modal = false">모달창 닫기</button>
-    </div>
-  </div>
+  <Discount v-bind="obj" />
+  <Modal @closeModal="modal = false" :oneroom="oneroom" :click="click" :modal="modal" />
   <div class="menu">
-    <a v-for="menu in menus" :key="menu">{{ menu }}</a>
+    <a v-for="(menu, i) in menus" :key="menu">{{ menus[i] }}</a>
   </div>
-  <div v-for="(a, i) in oneroom" :key="i">
-    <img :src="a.image" class="room-img">
-    <h4 @click="modal = true; click = i">{{a.title}}</h4>
-    <p>{{a.price}}</p>
-  </div>
-
+  <Card :oneroom="oneroom[i]" v-for="(onerooms, i) in oneroom" :key="onerooms" />
 </template>
 
 <script>
 import data from "./assets/oneroom";
+import Card from "./Card.vue";
+import Discount from "./Discount.vue";
+import Modal from "./Modal.vue";
+
 export default {
   name: "App",
   data() {
     return {
+      obj: { name: "kim", age: 20 },
+      menus: ["Home", "Shop", "About"],
       modal: false,
       oneroom: data,
-      click:0,
+      click: 0,
     };
   },
   methods: {
@@ -33,7 +29,7 @@ export default {
       this.click_num++;
     },
   },
-  components: {},
+  components: { Discount, Modal, Card },
 };
 </script>
 
@@ -44,19 +40,7 @@ body {
 div {
   box-sizing: border-box;
 }
-.black-bg {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-}
-.white-bg {
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
